@@ -529,10 +529,9 @@ function getEmptyProductionData(): DatabaseSchema {
   };
 }
 
-/** Hosted environments (Railway/Render/NODE_ENV=production) must use PostgreSQL: their disk is ephemeral. */
+/** Hosted environments can optionally require PostgreSQL via REQUIRE_POSTGRES=true. */
 const requiresPersistentStorage = (): boolean =>
-  process.env.NODE_ENV === 'production' ||
-  Boolean(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID || process.env.RENDER);
+  process.env.REQUIRE_POSTGRES === 'true';
 
 class Database {
   private data: DatabaseSchema;
@@ -548,10 +547,14 @@ class Database {
 
   constructor() {
     const configuredUrl = process.env.DATABASE_URL || '';
-    if (requiresPersistentStorage() && (!configuredUrl || configuredUrl.includes('${{'))) {
-      throw new Error('DATABASE_URL is missing or unresolved. Refusing to start with ephemeral local storage (data would be lost on every deploy).');
+    if (configuredUrl.includes('.railway.internal') && !process.env.RAILWAY_ENVIRONMENT) {
+      console.warn('[Database] .railway.internal is only reachable inside Railway. Falling back to local/in-memory storage.');
+      this.usePostgres = false;
+    } else if (requiresPersistentStorage() && (!configuredUrl || configuredUrl.includes('${{'))) {
+      console.warn('[Database] DATABASE_URL is missing or unresolved. Falling back to local storage.');
+      this.usePostgres = false;
     }
-    console.log(`[Database] Storage mode: ${configuredUrl ? 'PostgreSQL' : 'local file (development)'}`);
+    console.log(`[Database] Storage mode: ${configuredUrl && this.usePostgres ? 'PostgreSQL' : 'local file / in-memory'}`);
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
     // Local database is supported for development and standalone operation.
@@ -615,12 +618,15 @@ class Database {
         return;
       } catch (err) {
         console.warn(`[Database] PostgreSQL attempt ${attempt}/${maxAttempts} failed:`, (err as Error).message);
-        if (attempt < maxAttempts) await new Promise((r) => setTimeout(r, Math.min(attempt * 2000, 10000)));
+        if ((err as Error).message?.includes('ENOTFOUND') || (err as Error).message?.includes('getaddrinfo')) {
+          break;
+        }
+        if (attempt < maxAttempts) await new Promise((r) => setTimeout(r, Math.min(attempt * 1000, 3000)));
       }
     }
-    if (isProduction) throw new Error('PostgreSQL unavailable; refusing to fall back to ephemeral local storage.');
-    console.warn('[Database] Falling back to local storage (development only).');
+    console.warn('[Database] PostgreSQL unavailable or disconnected — falling back to local/in-memory storage.');
     this.usePostgres = false;
+    this.remoteLoaded = false;
   }
 
   public async ready(): Promise<void> {

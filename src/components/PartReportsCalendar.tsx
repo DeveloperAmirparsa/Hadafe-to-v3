@@ -3,6 +3,9 @@ import {
   Student,
   PlanTask,
   SessionReport,
+  Habit,
+  HabitLog,
+  FocusPointTransaction,
 } from '../types/index.js';
 import {
   toPersianDigits,
@@ -28,12 +31,17 @@ import {
   Coffee,
   HelpCircle,
   Percent,
+  FileDown,
 } from 'lucide-react';
+import { DailyReportPdfModal } from './DailyReportPdfModal.js';
 
 interface Props {
   student: Student;
   tasks: PlanTask[];
   reports: SessionReport[];
+  habits?: Habit[];
+  habitLogs?: HabitLog[];
+  transactions?: FocusPointTransaction[];
   theme?: 'dark' | 'light';
   isCounselor?: boolean;
 }
@@ -48,9 +56,15 @@ export const PartReportsCalendar: React.FC<Props> = ({
   student,
   tasks,
   reports,
+  habits = [],
+  habitLogs = [],
+  transactions = [],
   theme = 'dark',
   isCounselor = false,
 }) => {
+  const [showPdfModal, setShowPdfModal] = useState<boolean>(false);
+  const [selectedPdfDate, setSelectedPdfDate] = useState<string>(() => getTodayISODate());
+
   const [weekOffset, setWeekOffsetState] = useState<number>(() => {
     if (typeof window === 'undefined') return 0;
     const saved = window.sessionStorage.getItem('hadafeto:reports-week-offset');
@@ -421,43 +435,58 @@ export const PartReportsCalendar: React.FC<Props> = ({
           theme === 'dark' ? 'bg-slate-900/80 border-white/5' : 'bg-white border-slate-200'
         } flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-wrap`}
       >
-        {/* Week Switcher */}
-        <div className="flex items-center gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-white/10">
-          <button
-            onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="p-1.5 rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
-            title="هفته قبل"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Week Switcher */}
+          <div className="flex items-center gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-white/10">
+            <button
+              onClick={() => setWeekOffset((prev) => prev - 1)}
+              className="p-1.5 rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+              title="هفته قبل"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
 
-          <button
-            onClick={() => setWeekOffset(0)}
-            className={`px-3 py-1 rounded-xl text-xs font-medium transition-all ${
-              weekOffset === 0
-                ? 'bg-purple-600 text-white shadow-md font-bold'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            هفته جاری
-          </button>
+            <button
+              onClick={() => setWeekOffset(0)}
+              className={`px-3 py-1 rounded-xl text-xs font-medium transition-all ${
+                weekOffset === 0
+                  ? 'bg-purple-600 text-white shadow-md font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              هفته جاری
+            </button>
 
-          <button
-            onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="p-1.5 rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
-            title="هفته بعد"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+            <button
+              onClick={() => setWeekOffset((prev) => prev + 1)}
+              className="p-1.5 rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+              title="هفته بعد"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
 
-          <div className="h-4 w-px bg-white/10 mx-1" />
+            <div className="h-4 w-px bg-white/10 mx-1" />
 
-          <div className="flex items-center gap-1.5 px-2 text-xs text-purple-200 font-medium">
-            <CalendarDays className="w-3.5 h-3.5 text-purple-400" />
-            <span>
-              {weekDays[0].jalaliFormatted} تا {weekDays[6].jalaliFormatted}
-            </span>
+            <div className="flex items-center gap-1.5 px-2 text-xs text-purple-200 font-medium">
+              <CalendarDays className="w-3.5 h-3.5 text-purple-400" />
+              <span>
+                {weekDays[0].jalaliFormatted} تا {weekDays[6].jalaliFormatted}
+              </span>
+            </div>
           </div>
+
+          {/* Download Daily Report PDF Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPdfDate(todayIso);
+              setShowPdfModal(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-purple-600/30 transition-all active:scale-95 cursor-pointer"
+          >
+            <FileDown className="w-4 h-4" />
+            <span>دانلود گزارش روزانه PDF</span>
+          </button>
         </div>
 
         {/* Legend: Green vs Red vs Planned */}
@@ -576,6 +605,17 @@ export const PartReportsCalendar: React.FC<Props> = ({
                               </span>
                             )}
                           </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedPdfDate(day.isoDate);
+                              setShowPdfModal(true);
+                            }}
+                            title={`دانلود گزارش PDF ${day.dayName} (${day.jalaliFormatted})`}
+                            className="p-1.5 rounded-xl text-purple-300 hover:text-white hover:bg-purple-600/30 transition-colors"
+                          >
+                            <FileDown className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                         <div className="text-[11px] text-purple-300/80 font-medium mt-0.5">
                           {day.jalaliFormatted}
@@ -866,6 +906,20 @@ export const PartReportsCalendar: React.FC<Props> = ({
           </div>
         </div>
       )}
+
+      {/* Daily Report PDF Export Modal */}
+      <DailyReportPdfModal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+        student={student}
+        tasks={tasks}
+        reports={reports}
+        habits={habits}
+        habitLogs={habitLogs}
+        transactions={transactions}
+        initialDate={selectedPdfDate}
+        theme={theme}
+      />
     </div>
   );
 };

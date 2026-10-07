@@ -104,6 +104,47 @@ export function getTodayJalaliString(): string {
   return `${weekdayName}، ${toPersianDigits(jd)} ${monthName} ${toPersianDigits(jy)}`;
 }
 
+export function formatIsoToJalaliDetails(isoDate: string): {
+  fullDate: string;
+  dayName: string;
+  jalaliFormatted: string;
+  jalaliYear: number;
+  jalaliMonth: number;
+  jalaliDay: number;
+  fileDateString: string;
+} {
+  if (!isoDate) {
+    return {
+      fullDate: '—',
+      dayName: '',
+      jalaliFormatted: '—',
+      jalaliYear: 1405,
+      jalaliMonth: 1,
+      jalaliDay: 1,
+      fileDateString: 'report',
+    };
+  }
+  const parts = isoDate.split('-');
+  const y = parseInt(parts[0], 10) || 2026;
+  const m = parseInt(parts[1], 10) || 10;
+  const d = parseInt(parts[2], 10) || 1;
+  const dateObj = new Date(y, m - 1, d);
+  const [jy, jm, jd] = gregorianToJalali(y, m, d);
+  const weekdayIndex = (dateObj.getDay() + 1) % 7;
+  const dayName = PERSIAN_WEEKDAYS[weekdayIndex] || '';
+  const monthName = PERSIAN_MONTHS[jm - 1] || '';
+  const fileDateString = `${jy}-${String(jm).padStart(2, '0')}-${String(jd).padStart(2, '0')}`;
+  return {
+    fullDate: `${dayName}، ${toPersianDigits(jd)} ${monthName} ${toPersianDigits(jy)}`,
+    dayName,
+    jalaliFormatted: `${toPersianDigits(jd)} ${monthName} ${toPersianDigits(jy)}`,
+    jalaliYear: jy,
+    jalaliMonth: jm,
+    jalaliDay: jd,
+    fileDateString,
+  };
+}
+
 export function getTodayISODate(): string {
   const now = new Date();
   const year = now.getFullYear();

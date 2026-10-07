@@ -1666,6 +1666,8 @@ export const CounselorView: React.FC<Props> = ({
               student={selectedStudent}
               tasks={tasks}
               reports={reports}
+              habits={habits}
+              transactions={transactions}
               theme={theme}
               isCounselor={true}
             />

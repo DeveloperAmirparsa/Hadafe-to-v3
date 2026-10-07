@@ -1,6 +1,7 @@
 import express from 'express';
 import type { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
+import fs from 'fs';
 import path from 'path';
 import { db } from './src/server/db.js';
 import { isStrongPassword, normalizeUsername, sanitizeStudent, verifyPassword } from './src/server/security.js';
@@ -653,14 +654,16 @@ api.post('/study-hall/presence/:id/terminate', requireRole('COUNSELOR'), (req, r
 app.use('/api', api);
 
 async function startServer() {
-  if (!isProd) {
+  const distPath = path.resolve(process.cwd(), 'dist');
+  const hasDist = fs.existsSync(distPath) && fs.existsSync(path.join(distPath, 'index.html'));
+
+  if (isProd && hasDist) {
+    app.use(express.static(distPath, { maxAge: '1d', etag: true }));
+    app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
+  } else {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({ server: { middlewareMode: true }, appType: 'spa' });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.resolve(process.cwd(), 'dist');
-    app.use(express.static(distPath, { maxAge: '1d', etag: true }));
-    app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
   const server = app.listen(PORT, '0.0.0.0', () => console.log(`[Hadafe To] Server running on http://0.0.0.0:${PORT}`));
 

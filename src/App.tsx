@@ -655,6 +655,9 @@ export default function App() {
                 student={currentStudent}
                 tasks={tasks}
                 reports={sessionReports}
+                habits={habits}
+                habitLogs={habitLogs}
+                transactions={transactions}
                 theme={theme}
               />
             )}
