@@ -41,17 +41,17 @@ export const FooterBar: React.FC<Props> = ({ theme, className = '' }) => {
 
           {/* Powered By section */}
           <div className="flex items-center gap-2 font-bold text-xs">
-            <span className="text-slate-400 font-normal hidden sm:inline">طراح و توسعه دهنده:</span>
+            <span className="text-slate-400 font-normal hidden sm:inline">طراح ارشد و توسعه دهنده:</span>
             <a
-              href="https://www.instagram.com/arena_tm2921/"
+              href="https://www.instagram.com/amirparsa_hfz/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/25 border border-purple-500/20 hover:border-purple-500/50 backdrop-blur-md transition-all cursor-pointer shadow-sm hover:shadow-[0_0_16px_rgba(168,85,247,0.35)] hover:scale-105 active:scale-95 group"
-              title="مشاهده صفحه اینستاگرام طراح و توسعه دهنده (@arena_tm2921)"
+              title="مشاهده صفحه اینستاگرام طراح و توسعه دهنده (@amirparsa_hfz)"
             >
               <Cpu className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform shrink-0" />
               <span className="text-gradient-rgb-fast font-extrabold text-[13px] tracking-wide" dir="ltr">
-                @amirparsa_hfz
+                amirparsa_hfz
               </span>
             </a>
           </div>
