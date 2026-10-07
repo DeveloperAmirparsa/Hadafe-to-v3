@@ -20,7 +20,6 @@ import {
 } from '../utils/persianDate.js';
 import {
   normalizeDailyReportData,
-  createStressTestDailyReportData,
 } from './pdf/dataNormalizer.js';
 import { DailyReportPdfDocument } from './pdf/DailyReportPdfDocument.js';
 import { exportDailyReportToPdf } from './pdf/pdfGenerator.js';
@@ -36,7 +35,6 @@ import {
   AlertCircle,
   Eye,
   Loader2,
-  TestTube,
 } from 'lucide-react';
 
 interface Props {
@@ -68,7 +66,6 @@ export const DailyReportPdfModal: React.FC<Props> = ({
   const [selectedDate, setSelectedDate] = useState<string>(
     initialDate || getTodayISODate()
   );
-  const [isStressTestMode, setIsStressTestMode] = useState<boolean>(false);
   const [isPreviewActive, setIsPreviewActive] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [progressStatus, setProgressStatus] = useState<string>('');
@@ -84,9 +81,6 @@ export const DailyReportPdfModal: React.FC<Props> = ({
 
   // Normalized Daily Report Data
   const reportData = useMemo(() => {
-    if (isStressTestMode) {
-      return createStressTestDailyReportData(student, selectedDate);
-    }
     return normalizeDailyReportData(
       student,
       selectedDate,
@@ -97,7 +91,6 @@ export const DailyReportPdfModal: React.FC<Props> = ({
       transactions
     );
   }, [
-    isStressTestMode,
     student,
     selectedDate,
     tasks,
@@ -166,23 +159,6 @@ export const DailyReportPdfModal: React.FC<Props> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Stress Test Toggle (Development / Testing Only) */}
-            {import.meta.env.DEV && (
-              <button
-                type="button"
-                onClick={() => setIsStressTestMode((prev) => !prev)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors border ${
-                  isStressTestMode
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                    : 'bg-white/5 text-slate-400 border-white/10 hover:text-white'
-                }`}
-                title="تست استرس چندصفحه‌ای با ۳۰+ پارت و یادداشت‌های بلند"
-              >
-                <TestTube className="w-3.5 h-3.5" />
-                <span>تست استرس ۳۰+ پارت</span>
-              </button>
-            )}
-
             <button
               onClick={onClose}
               className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"

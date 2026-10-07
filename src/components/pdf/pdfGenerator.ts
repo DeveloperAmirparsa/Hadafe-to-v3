@@ -1,9 +1,7 @@
 /**
  * Production PDF Generation Engine
- * Coordinates font loading, element measuring, multi-page canvas capture, and jsPDF export.
+ * Uses server-side Chromium/Puppeteer to print the exact same rendered DOM and CSS as the Preview.
  */
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 import { DailyReportData } from './types.js';
 
 export interface GeneratePdfOptions {
@@ -41,7 +39,8 @@ export async function waitLayoutReady(ms = 150): Promise<void> {
 }
 
 /**
- * Generates and downloads a multi-page PDF from a rendered container of A4 pages.
+ * Generates and downloads a multi-page PDF via Chromium/Puppeteer
+ * printing the exact same rendered HTML and CSS as the Preview.
  */
 export async function exportDailyReportToPdf(
   containerElement: HTMLElement,
@@ -51,13 +50,13 @@ export async function exportDailyReportToPdf(
   const filename = `hadafeto-daily-report-${data.fileDateString}.pdf`;
 
   try {
-    options?.onProgress?.({ step: 'در حال بارگذاری قلم‌ها و چیدمان...', current: 0, total: 100 });
+    options?.onProgress?.({ step: 'در حال آماده‌سازی قالب و قلم‌های فارسی...', current: 15, total: 100 });
 
-    // 1. Ensure fonts are loaded
+    // 1. Ensure fonts are loaded and layout is stable
     await ensureFontsReady();
     await waitLayoutReady(150);
 
-    // 2. Locate all pages rendered inside the container
+    // 2. Count pages rendered in the DOM
     const pageElements = Array.from(
       containerElement.querySelectorAll<HTMLElement>('[data-pdf-page]')
     );
@@ -67,66 +66,132 @@ export async function exportDailyReportToPdf(
     }
 
     const totalPages = pageElements.length;
+
     options?.onProgress?.({
-      step: `آماده‌سازی صفحات (${totalPages} صفحه)...`,
-      current: 10,
-      total: totalPages,
+      step: `ارسال ساختار به موتور چاپگر مرورگر (${totalPages} صفحه)...`,
+      current: 40,
+      total: 100,
     });
 
-    // 3. Initialize jsPDF (A4 Portrait in mm: 210 x 297)
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-      compress: true,
+    // 3. Extract all style declarations currently present in the document
+    const styles = Array.from(document.querySelectorAll('style'))
+      .map((s) => s.innerHTML)
+      .join('\n');
+
+    // 4. Capture the rendered document DOM directly
+    const documentHtml = containerElement.outerHTML;
+
+    // 5. Construct full standalone HTML document with strict A4 styling and fonts
+    const fullHtml = `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+${styles}
+  </style>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #090b17 !important;
+      color: #f8fafc !important;
+      width: 794px !important;
+      min-width: 794px !important;
+      max-width: 794px !important;
+      font-family: 'Estedad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Arial, sans-serif !important;
+      direction: rtl !important;
+      overflow: visible !important;
+    }
+    #hadafeto-pdf-document {
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 0 !important;
+      width: 794px !important;
+      min-width: 794px !important;
+      max-width: 794px !important;
+      background-color: transparent !important;
+      display: block !important;
+    }
+    [data-pdf-page] {
+      width: 794px !important;
+      min-width: 794px !important;
+      max-width: 794px !important;
+      height: 1123px !important;
+      min-height: 1123px !important;
+      max-height: 1123px !important;
+      box-sizing: border-box !important;
+      margin: 0 !important;
+      page-break-after: always !important;
+      break-after: page !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      overflow: hidden !important;
+      position: relative !important;
+    }
+    [data-pdf-page]:last-child {
+      page-break-after: auto !important;
+      break-after: auto !important;
+    }
+  </style>
+</head>
+<body style="background-color: #090b17; color: #f8fafc; margin: 0; padding: 0;">
+  ${documentHtml}
+</body>
+</html>`;
+
+    options?.onProgress?.({
+      step: 'تولید خروجی PDF با موتور اختصاصی Chromium...',
+      current: 70,
+      total: 100,
     });
 
-    // 4. Capture each page sequentially with high-resolution canvas
-    for (let index = 0; index < totalPages; index++) {
-      const pageEl = pageElements[index];
+    // 6. Request backend Chromium to render the PDF
+    const response = await fetch('/api/pdf/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        html: fullHtml,
+        filename,
+      }),
+    });
 
-      options?.onProgress?.({
-        step: `پردازش صفحه ${index + 1} از ${totalPages}...`,
-        current: index + 1,
-        total: totalPages,
-      });
-
-      // Verification of content bounds
-      const scrollHeight = pageEl.scrollHeight;
-      const clientHeight = pageEl.clientHeight;
-      if (scrollHeight > clientHeight + 5) {
-        console.warn(`[PDF Warning] Page ${index + 1} content overflow detected: scroll=${scrollHeight}, client=${clientHeight}`);
+    if (!response.ok) {
+      let errorMessage = 'خطا در ارتباط با سرور ساخت PDF';
+      try {
+        const errorJson = await response.json();
+        if (errorJson?.error) errorMessage = errorJson.error;
+      } catch {
+        // ignore parse error
       }
-
-      // High-res canvas capture (scale 2 gives crisp 192 DPI print sharpness)
-      const canvas = await html2canvas(pageEl, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#090b17',
-        windowWidth: 794,
-        windowHeight: 1123,
-      });
-
-      // Convert to image data
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
-      if (index > 0) {
-        pdf.addPage('a4', 'portrait');
-      }
-
-      // 210mm x 297mm full-bleed A4 placement
-      pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
-
-      // Free canvas memory
-      canvas.width = 1;
-      canvas.height = 1;
+      throw new Error(errorMessage);
     }
 
-    options?.onProgress?.({ step: 'در حال ذخیره‌سازی فایل...', current: totalPages, total: totalPages });
+    options?.onProgress?.({ step: 'در حال ذخیره‌سازی فایل...', current: 95, total: 100 });
 
-    // 5. Download the PDF file
-    pdf.save(filename);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 
     return {
       success: true,
@@ -134,7 +199,7 @@ export async function exportDailyReportToPdf(
       filename,
     };
   } catch (error) {
-    console.error('Failed to generate daily report PDF:', error);
+    console.error('Failed to generate daily report PDF via Chromium:', error);
     return {
       success: false,
       pageCount: 0,
@@ -143,3 +208,4 @@ export async function exportDailyReportToPdf(
     };
   }
 }
+

@@ -44,6 +44,10 @@ export const PdfPage: React.FC<PageProps> = ({
         position: 'relative',
         overflow: 'hidden',
         direction: 'rtl',
+        breakAfter: pageNumber === totalPages ? 'auto' : 'page',
+        pageBreakAfter: pageNumber === totalPages ? 'auto' : 'always',
+        breakInside: 'avoid',
+        pageBreakInside: 'avoid',
       }}
     >
       {/* Background ambient gradient */}

@@ -1,0 +1,915 @@
+{
+  "students": [
+    {
+      "id": "student_1",
+      "username": "aryan",
+      "passwordHash": "scrypt$32768$8$1$XN61wbTHVTEWM7j-g6vW-Q$C7hHbZFR1nIp4AfYelzFLev8ayrCGvE3M52VzClYvNaqGW0Cz4qS-hymzUbPrRWQoXk4mvuHgMtRTfsSIdlC-w",
+      "fullName": "آرین محمدی",
+      "nickname": "آرین",
+      "motto": "پزشکی دانشگاه تهران؛ هر روز، یک قدم نزدیک‌تر.",
+      "grade": "دوازدهم",
+      "major": "علوم تجربی",
+      "goals": [
+        {
+          "id": "g1",
+          "title": "رتبه زیر ۱۰۰ منطقه یک",
+          "targetRank": "۵۰",
+          "targetUniversity": "دانشگاه علوم پزشکی تهران",
+          "isPublic": true
+        },
+        {
+          "id": "g2",
+          "title": "درصد زیست‌شناسی بالای ۸۵٪",
+          "isPublic": true
+        },
+        {
+          "id": "g3",
+          "title": "تثبیت میانگین تراز قلم‌چی روی ۷۲۰۰",
+          "isPublic": false
+        }
+      ],
+      "phone": "۰۹۱۲۳۴۵۶۷۸۹",
+      "city": "تهران",
+      "counselorNotes": "دانش‌آموز بسیار منظم، در تست‌های مفهومی زیست‌شناسی ژنتیک نیاز به تمرکز بیشتر دارد. روحیه رقابتی عالی.",
+      "focusPoints": 4070,
+      "streak": 34,
+      "dailyStudyGoalMinutes": 480,
+      "weeklyStudyGoalMinutes": 3000,
+      "createdAt": "2026-08-01T08:00:00.000Z"
+    },
+    {
+      "id": "student_2",
+      "username": "sara",
+      "passwordHash": "scrypt$32768$8$1$XN61wbTHVTEWM7j-g6vW-Q$C7hHbZFR1nIp4AfYelzFLev8ayrCGvE3M52VzClYvNaqGW0Cz4qS-hymzUbPrRWQoXk4mvuHgMtRTfsSIdlC-w",
+      "fullName": "سارا کاظمی",
+      "nickname": "سارا",
+      "motto": "مهندسی کامپیوتر دانشگاه صنعتی شریف.",
+      "grade": "دوازدهم",
+      "major": "ریاضی فیزیک",
+      "goals": [
+        {
+          "id": "g4",
+          "title": "رتبه دو رقمی کنکور ریاضی",
+          "targetRank": "۳۵",
+          "targetUniversity": "دانشگاه صنعتی شریف",
+          "isPublic": true
+        },
+        {
+          "id": "g5",
+          "title": "حسابان و هندسه بالای ۸۰٪",
+          "isPublic": true
+        }
+      ],
+      "phone": "۰۹۱۹۸۷۶۵۴۳۲",
+      "city": "اصفهان",
+      "counselorNotes": "استعداد فوق‌العاده در ریاضیات. سرعت تست‌زنی باید با آزمون‌های زمان‌دار تقویت شود.",
+      "focusPoints": 985,
+      "streak": 18,
+      "dailyStudyGoalMinutes": 420,
+      "weeklyStudyGoalMinutes": 2800,
+      "createdAt": "2026-08-10T08:00:00.000Z"
+    },
+    {
+      "id": "student_3",
+      "username": "mohammad",
+      "passwordHash": "scrypt$32768$8$1$XN61wbTHVTEWM7j-g6vW-Q$C7hHbZFR1nIp4AfYelzFLev8ayrCGvE3M52VzClYvNaqGW0Cz4qS-hymzUbPrRWQoXk4mvuHgMtRTfsSIdlC-w",
+      "fullName": "محمد رضایی",
+      "nickname": "محمد",
+      "motto": "دانشکده حقوق دانشگاه شهید بهشتی.",
+      "grade": "دوازدهم",
+      "major": "علوم انسانی",
+      "goals": [
+        {
+          "id": "g6",
+          "title": "رتبه تک‌رقمی کنکور انسانی",
+          "targetRank": "۸",
+          "targetUniversity": "دانشگاه شهید بهشتی",
+          "isPublic": true
+        }
+      ],
+      "phone": "۰۹۳۵۱۱۱۲۲۳۳",
+      "city": "شیراز",
+      "counselorNotes": "مرورهای دوره‌ای فنون و عربی بسیار منظم انجام می‌شود.",
+      "focusPoints": 640,
+      "streak": 9,
+      "dailyStudyGoalMinutes": 360,
+      "weeklyStudyGoalMinutes": 2400,
+      "createdAt": "2026-08-20T08:00:00.000Z"
+    },
+    {
+      "id": "student_4",
+      "username": "niloufar",
+      "passwordHash": "scrypt$32768$8$1$XN61wbTHVTEWM7j-g6vW-Q$C7hHbZFR1nIp4AfYelzFLev8ayrCGvE3M52VzClYvNaqGW0Cz4qS-hymzUbPrRWQoXk4mvuHgMtRTfsSIdlC-w",
+      "fullName": "نیلوفر راد",
+      "nickname": "نیلوفر",
+      "motto": "پشتکار بالا کلید هر موفقیتی است.",
+      "grade": "یازدهم",
+      "major": "علوم تجربی",
+      "goals": [
+        {
+          "id": "g7",
+          "title": "دندانپزشکی شهید بهشتی",
+          "isPublic": false
+        }
+      ],
+      "phone": "۰۹۱۲۹۹۹۸۸۷۷",
+      "city": "تبریز",
+      "counselorNotes": "پایه یازدهم، شروع پرانرژی برای جمع‌بندی دروس پایه.",
+      "focusPoints": 320,
+      "streak": 4,
+      "dailyStudyGoalMinutes": 300,
+      "weeklyStudyGoalMinutes": 2000,
+      "createdAt": "2026-09-01T08:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_1",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی ۳ - فصل ۵ (از ماده به انرژی)",
+      "activityType": "مطالعه",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 75,
+      "startTime": "08:00",
+      "endTime": "09:15",
+      "order": 1,
+      "isCompleted": true,
+      "completedAt": "2026-10-06T08:15:00.000Z"
+    },
+    {
+      "id": "task_2",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی ۳ - تست تنفس نوری و زنجیره انتقال",
+      "activityType": "تست",
+      "testMode": "آزمونی",
+      "minTests": 40,
+      "durationMinutes": 60,
+      "startTime": "09:45",
+      "endTime": "10:45",
+      "order": 2,
+      "isCompleted": true,
+      "completedAt": "2026-10-06T10:00:00.000Z"
+    },
+    {
+      "id": "task_3",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "شیمی ۲ - ساختار اتم و آرایش الکترونی",
+      "activityType": "مرور",
+      "testMode": "آموزشی",
+      "minTests": 25,
+      "durationMinutes": 75,
+      "startTime": "11:15",
+      "endTime": "12:30",
+      "order": 3,
+      "isCompleted": false
+    },
+    {
+      "id": "task_4",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "فیزیک ۳ - دینامیک و حرکت دایره‌ای",
+      "activityType": "تست",
+      "testMode": "آزمونی",
+      "minTests": 30,
+      "durationMinutes": 90,
+      "startTime": "14:00",
+      "endTime": "15:30",
+      "order": 4,
+      "isCompleted": false
+    },
+    {
+      "id": "task_5",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "استراحت میان‌وعده و هوازی",
+      "activityType": "مرور",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 30,
+      "startTime": "15:45",
+      "endTime": "16:15",
+      "order": 5,
+      "isRest": true,
+      "isCompleted": false
+    },
+    {
+      "id": "task_6",
+      "studentId": "student_2",
+      "date": "2026-10-07",
+      "courseName": "حسابان ۲ - مشتق و کاربرد مشتق",
+      "activityType": "تست",
+      "testMode": "آزمونی",
+      "minTests": 35,
+      "durationMinutes": 90,
+      "startTime": "08:30",
+      "endTime": "10:00",
+      "order": 1,
+      "isCompleted": false
+    },
+    {
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی دوازدهم - ژنتیک",
+      "activityType": "مطالعه",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 75,
+      "order": 6,
+      "status": "PLANNED",
+      "isRest": false,
+      "isCompleted": false,
+      "id": "task_1791397041443_jxod"
+    },
+    {
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی دوازدهم - ژنتیک",
+      "activityType": "مطالعه",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 75,
+      "order": 7,
+      "status": "PLANNED",
+      "isRest": false,
+      "isCompleted": false,
+      "id": "task_1791397081956_0ux6"
+    },
+    {
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی دوازدهم - ژنتیک",
+      "activityType": "مطالعه",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 75,
+      "order": 8,
+      "status": "PLANNED",
+      "isRest": false,
+      "isCompleted": false,
+      "id": "task_1791397690938_trhb"
+    }
+  ],
+  "sessionReports": [
+    {
+      "id": "report_1",
+      "studentId": "student_1",
+      "taskId": "task_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی ۳ - فصل ۵ (از ماده به انرژی)",
+      "isCompleted": true,
+      "satisfaction": 5,
+      "focus": 5,
+      "difficulty": 3,
+      "testsCount": 0,
+      "reflectionNote": "مفاهیم زنجیره انتقال الکترون به طور کامل مرور شد و جدول خلاصه رسم کردم.",
+      "focusPointsEarned": 20,
+      "createdAt": "2026-10-06T08:16:00.000Z"
+    },
+    {
+      "id": "report_2",
+      "studentId": "student_1",
+      "taskId": "task_2",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی ۳ - تست تنفس نوری و زنجیره انتقال",
+      "isCompleted": true,
+      "satisfaction": 4,
+      "focus": 4,
+      "difficulty": 4,
+      "testsCount": 40,
+      "testResult": {
+        "total": 40,
+        "correct": 33,
+        "wrong": 4,
+        "unanswered": 3,
+        "percentage": 79.17
+      },
+      "reflectionNote": "تله‌های گزینه‌ای مربوط به فسفوریلاسیون اکسیداتیو مشخص شدند.",
+      "focusPointsEarned": 60,
+      "createdAt": "2026-10-06T10:02:00.000Z"
+    }
+  ],
+  "habits": [
+    {
+      "id": "h1",
+      "title": "بیداری رأس ساعت ۰۶:۰۰ صبح",
+      "description": "تنظیم ریتم شبانه‌روزی و شروع با انرژی بالا",
+      "category": "روتین",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "h2",
+      "title": "خواب باکیفیت قبل از ساعت ۲۳:۳۰",
+      "description": "حداقل ۷ ساعت خواب پیوسته برای تثبیت حافظه",
+      "category": "سلامت",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "h3",
+      "title": "ورزش کششی یا پیاده‌روی ۲۰ دقیقه‌ای",
+      "description": "بهبود اکسیژن‌رسانی به مغز",
+      "category": "سلامت",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "h4",
+      "title": "تحلیل دقیق و نشان‌دار کردن تست‌های غلط",
+      "description": "یادداشت‌برداری نکات تستی در دفترچه اختصاصی",
+      "category": "مطالعه",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    }
+  ],
+  "habitLogs": [
+    {
+      "id": "hl1",
+      "habitId": "h1",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "completed": true,
+      "status": "APPROVED",
+      "requestedAt": "2026-10-06T06:05:00.000Z",
+      "reviewedAt": "2026-10-06T06:10:00.000Z"
+    },
+    {
+      "id": "hl2",
+      "habitId": "h2",
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "completed": true,
+      "status": "APPROVED",
+      "requestedAt": "2026-10-06T06:00:00.000Z",
+      "reviewedAt": "2026-10-06T06:08:00.000Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx_1",
+      "studentId": "student_1",
+      "amount": 20,
+      "type": "PART",
+      "description": "تکمیل پارت مطالعه زیست‌شناسی و ثبت کامل گزارش",
+      "actor": "SYSTEM",
+      "createdAt": "2026-10-06T08:16:00.000Z"
+    },
+    {
+      "id": "tx_2",
+      "studentId": "student_1",
+      "amount": 60,
+      "type": "TEST",
+      "description": "تکمیل پارت تست زیست‌شناسی (۴۰ تست + پارت)",
+      "actor": "SYSTEM",
+      "createdAt": "2026-10-06T10:02:00.000Z"
+    },
+    {
+      "id": "tx_3",
+      "studentId": "student_1",
+      "amount": 10,
+      "type": "HABIT",
+      "description": "تکمیل عادت بیداری ساعت ۰۶:۰۰ صبح",
+      "actor": "SYSTEM",
+      "createdAt": "2026-10-06T06:05:00.000Z"
+    },
+    {
+      "id": "tx_4",
+      "studentId": "student_1",
+      "amount": 10,
+      "type": "HABIT",
+      "description": "تکمیل عادت خواب منظم",
+      "actor": "SYSTEM",
+      "createdAt": "2026-10-06T06:00:00.000Z"
+    },
+    {
+      "id": "tx_5",
+      "studentId": "student_1",
+      "amount": 50,
+      "type": "COUNSELOR_BONUS",
+      "description": "پاداش تشویقی مشاور برای نظم فوق‌العاده در آزمون آزمایشی",
+      "actor": "COUNSELOR",
+      "createdAt": "2026-10-05T18:30:00.000Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": 1000,
+      "type": "COUNSELOR_BONUS",
+      "description": "شارژ تستی امتیاز تمرکز",
+      "actor": "COUNSELOR",
+      "id": "tx_1791397041467_2fnf",
+      "createdAt": "2026-10-07T18:17:21.467Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": -150,
+      "type": "REWARD_PURCHASE",
+      "description": "خرید «۳۰ دقیقه استراحت آزاد» از فروشگاه",
+      "actor": "STUDENT",
+      "id": "tx_1791397041477_wj87",
+      "createdAt": "2026-10-07T18:17:21.477Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": -300,
+      "type": "REWARD_PURCHASE",
+      "description": "خرید «عنوان «پژوهشگر»» از فروشگاه",
+      "actor": "STUDENT",
+      "id": "tx_1791397041482_p7pd",
+      "createdAt": "2026-10-07T18:17:21.482Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": 100,
+      "type": "COUNSELOR_BONUS",
+      "description": "پاداش گشایش دستاورد «اراده پولادین ۳۰ روزه»",
+      "actor": "SYSTEM",
+      "id": "tx_1791397041512_q2vd",
+      "createdAt": "2026-10-07T18:17:21.512Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": 1000,
+      "type": "COUNSELOR_BONUS",
+      "description": "شارژ تستی امتیاز تمرکز",
+      "actor": "COUNSELOR",
+      "id": "tx_1791397081977_zl2v",
+      "createdAt": "2026-10-07T18:18:01.977Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": 1000,
+      "type": "COUNSELOR_BONUS",
+      "description": "شارژ تستی امتیاز تمرکز",
+      "actor": "COUNSELOR",
+      "id": "tx_1791397690964_3t1u",
+      "createdAt": "2026-10-07T18:28:10.964Z"
+    }
+  ],
+  "rewards": [
+    {
+      "id": "r_free_consulting",
+      "title": "یک ماه مشاوره تخصصی رایگان",
+      "description": "پاداش ویژه برای دانش‌آموزان با استمرار اسطوره‌ای و امتیاز فوق‌العاده. هزینه بالا و قابل تنظیم توسط مشاور.",
+      "cost": 5000,
+      "icon": "Crown",
+      "active": true,
+      "isFreeConsultingMonth": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "r_break_30",
+      "title": "۳۰ دقیقه استراحت آزاد",
+      "description": "یک وقت استراحت مازاد بدون تداخل با برنامه رسمی",
+      "cost": 150,
+      "icon": "Coffee",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "r_game_60",
+      "title": "یک ساعت آزادی و تفریح دلخواه",
+      "description": "مجوز بازی، فیلم یا تفریح آزاد در پایان هفته با هماهنگی مشاور",
+      "cost": 300,
+      "icon": "Gamepad2",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "r_badge_konkur",
+      "title": "نشان افتخار: فاتح کنکور (Badge)",
+      "description": "نشان زرین در صفحه پروفایل و تورنمنت",
+      "cost": 600,
+      "icon": "Award",
+      "active": true,
+      "badgeType": "VICTOR",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "r_badge_streak",
+      "title": "نشان افتخار: اراده پولادین (Badge)",
+      "description": "ویژه دانش‌آموزان با استمرار بالای ۲۰ روز",
+      "cost": 800,
+      "icon": "Flame",
+      "active": true,
+      "badgeType": "STEEL_WILL",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    }
+  ],
+  "rewardClaims": [],
+  "settings": {
+    "testPercentageFormula": "((correct - (wrong / 3)) / total) * 100",
+    "diagnosticWeights": {
+      "studyHours": 0.25,
+      "tests": 0.25,
+      "planCompletion": 0.2,
+      "streak": 0.15,
+      "habits": 0.1,
+      "focus": 0.05
+    },
+    "konkurDate": "2027-04-23T08:00:00.000Z"
+  },
+  "notes": [],
+  "badges": [
+    {
+      "id": "badge_1",
+      "name": "نشان تمرکز عمیق",
+      "description": "ثبت پارت‌های متوالی با شاخص تمرکز حداکثری",
+      "rarity": "معمولی",
+      "icon": "Target",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_2",
+      "name": "نشان ریتم پایدار",
+      "description": "حفظ استمرار منظم مطالعه در تمام ایام هفته",
+      "rarity": "معمولی",
+      "icon": "Activity",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_3",
+      "name": "نشان سحرخیز کنکور",
+      "description": "شروع اولین پارت درسی رأس ساعت ۶ صبح",
+      "rarity": "کمیاب",
+      "icon": "Sunrise",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_4",
+      "name": "نشان اراده پولادین",
+      "description": "دستیابی به استمرار بی‌وقفه بالای ۲۰ روز در برنامه رسمی",
+      "rarity": "حماسی",
+      "icon": "Flame",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_5",
+      "name": "نشان نابغه آزمون",
+      "description": "کسب درصد بالای ۸۰٪ در آزمون‌های دشوار مفهومی",
+      "rarity": "افسانه‌ای",
+      "icon": "Zap",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_6",
+      "name": "نشان فاتح کنکور",
+      "description": "پایداری خارق‌العاده و رتبه برتر در جدول تورنمنت کشوری",
+      "rarity": "اسطوره‌ای",
+      "icon": "Trophy",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_c_nabz",
+      "name": "نشان نبض برتر",
+      "description": "بالاترین نشان افتخار مشاوره برای نظم و رشد جهشی بالینی در مطالعه",
+      "rarity": "اسطوره‌ای",
+      "icon": "HeartPulse",
+      "isCounselorOnly": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_c_masir",
+      "name": "نشان مسیر طلایی",
+      "description": "نشان ویژه وفاداری بی‌نقص به نقشه راه راهبردی و استراتژی مشاوره",
+      "rarity": "افسانه‌ای",
+      "icon": "Compass",
+      "isCounselorOnly": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "badge_c_mohr",
+      "name": "نشان مهر مشاور",
+      "description": "تاییدیه انحصاری استاد مشاور به پاس اراده پولادین و اخلاق حرفه‌ای تحصیلی",
+      "rarity": "حماسی",
+      "icon": "Award",
+      "isCounselorOnly": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    }
+  ],
+  "titles": [
+    {
+      "id": "title_1",
+      "title": "پیشگام",
+      "description": "دانش‌آموزی که پیشتاز اجرای برنامه است",
+      "rarity": "معمولی",
+      "cost": 250,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "title_2",
+      "title": "پژوهشگر",
+      "description": "دقت در تحلیل موشکافانه پاسخنامه آزمون‌ها",
+      "rarity": "معمولی",
+      "cost": 300,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "title_3",
+      "title": "محور تمرکز",
+      "description": "توانایی حفظ سکوت و تمرکز مطلق در سالن مطالعه",
+      "rarity": "کمیاب",
+      "cost": 600,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "title_4",
+      "title": "فرمانده مطالعه",
+      "description": "تسلط بی‌چون‌وچرا بر حجم بالای مباحث کنکور",
+      "rarity": "حماسی",
+      "cost": 1100,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "title_5",
+      "title": "نابغه",
+      "description": "استعداد درخشان با رویکرد علمی و استراتژیک",
+      "rarity": "افسانه‌ای",
+      "cost": 1800,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "title_6",
+      "title": "اسطوره‌ای",
+      "description": "عنوان والامرتبه برگزیدگان رتبه‌های تک‌رقمی",
+      "rarity": "اسطوره‌ای",
+      "cost": 3000,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    }
+  ],
+  "storeProducts": [
+    {
+      "id": "sp_b1",
+      "title": "نشان تمرکز عمیق",
+      "description": "نشان دیجیتال تمرکز بالا در پارت‌ها",
+      "cost": 200,
+      "rarity": "معمولی",
+      "category": "BADGE",
+      "icon": "Target",
+      "isConsumable": false,
+      "badgeId": "badge_1",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_b2",
+      "title": "نشان ریتم پایدار",
+      "description": "نشان حفظ استمرار هفتگی",
+      "cost": 350,
+      "rarity": "معمولی",
+      "category": "BADGE",
+      "icon": "Activity",
+      "isConsumable": false,
+      "badgeId": "badge_2",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_b3",
+      "title": "نشان سحرخیز کنکور",
+      "description": "نشان بیداری رأس ساعت ۶ صبح",
+      "cost": 500,
+      "rarity": "کمیاب",
+      "category": "BADGE",
+      "icon": "Sunrise",
+      "isConsumable": false,
+      "badgeId": "badge_3",
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_b4",
+      "title": "نشان اراده پولادین",
+      "description": "نشان استمرار بالای ۲۰ روز",
+      "cost": 850,
+      "rarity": "حماسی",
+      "category": "BADGE",
+      "icon": "Flame",
+      "isConsumable": false,
+      "badgeId": "badge_4",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_b5",
+      "title": "نشان نابغه آزمون",
+      "description": "نشان تراز درخشان در آزمون‌ها",
+      "cost": 1200,
+      "rarity": "افسانه‌ای",
+      "category": "BADGE",
+      "icon": "Zap",
+      "isConsumable": false,
+      "badgeId": "badge_5",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_b6",
+      "title": "نشان فاتح کنکور",
+      "description": "نشان زرین رتبه برتر",
+      "cost": 2000,
+      "rarity": "اسطوره‌ای",
+      "category": "BADGE",
+      "icon": "Trophy",
+      "isConsumable": false,
+      "badgeId": "badge_6",
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t1",
+      "title": "عنوان «پیشگام»",
+      "description": "عنوان رسمی در کنار نام کاربری در سالن مطالعه",
+      "cost": 250,
+      "rarity": "معمولی",
+      "category": "TITLE",
+      "icon": "Tag",
+      "isConsumable": false,
+      "titleId": "title_1",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t2",
+      "title": "عنوان «پژوهشگر»",
+      "description": "عنوان موشکافی و دقت تحلیلی",
+      "cost": 300,
+      "rarity": "معمولی",
+      "category": "TITLE",
+      "icon": "Tag",
+      "isConsumable": false,
+      "titleId": "title_2",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t3",
+      "title": "عنوان «محور تمرکز»",
+      "description": "عنوان پرستیژ در سالن مطالعه",
+      "cost": 600,
+      "rarity": "کمیاب",
+      "category": "TITLE",
+      "icon": "Tag",
+      "isConsumable": false,
+      "titleId": "title_3",
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t4",
+      "title": "عنوان «فرمانده مطالعه»",
+      "description": "عنوان افتخاری تسلط بر برنامه",
+      "cost": 1100,
+      "rarity": "حماسی",
+      "category": "TITLE",
+      "icon": "Tag",
+      "isConsumable": false,
+      "titleId": "title_4",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t5",
+      "title": "عنوان «نابغه»",
+      "description": "عنوان طلایی دانشجویان ممتاز",
+      "cost": 1800,
+      "rarity": "افسانه‌ای",
+      "category": "TITLE",
+      "icon": "Tag",
+      "isConsumable": false,
+      "titleId": "title_5",
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_t6",
+      "title": "عنوان «اسطوره‌ای»",
+      "description": "والاترین عنوان سامانه هدف تو",
+      "cost": 3000,
+      "rarity": "اسطوره‌ای",
+      "category": "TITLE",
+      "icon": "Crown",
+      "isConsumable": false,
+      "titleId": "title_6",
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_c1",
+      "title": "۳۰ دقیقه استراحت آزاد",
+      "description": "یک پارت استراحت بدون ثبت در کاستی‌های برنامه هفتگی",
+      "cost": 150,
+      "rarity": "معمولی",
+      "category": "CONSUMABLE",
+      "icon": "Coffee",
+      "isConsumable": true,
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_c2",
+      "title": "یک ساعت تفریح دلخواه",
+      "description": "مجوز استراحت مازاد در پایان هفته با هماهنگی مشاور",
+      "cost": 300,
+      "rarity": "کمیاب",
+      "category": "CONSUMABLE",
+      "icon": "Gamepad2",
+      "isConsumable": true,
+      "active": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "sp_c_consult",
+      "title": "یک ماه مشاوره تخصصی رایگان",
+      "description": "گران‌ترین و ارزشمندترین پاداش سامانه هدف تو شامل ۴ جلسه تحلیل اختصاصی و برنامه‌ریزی فردی",
+      "cost": 5000,
+      "rarity": "اسطوره‌ای",
+      "category": "SPECIAL",
+      "icon": "Sparkles",
+      "isConsumable": true,
+      "isFreeConsultingMonth": true,
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv_1",
+      "studentId": "student_1",
+      "productId": "sp_t1",
+      "itemType": "TITLE",
+      "title": "پیشگام",
+      "description": "دانش‌آموزی که پیشتاز اجرای برنامه است",
+      "rarity": "معمولی",
+      "icon": "Tag",
+      "isEquipped": false,
+      "isConsumed": false,
+      "titleId": "title_1",
+      "acquiredAt": "2026-08-05T00:00:00.000Z"
+    },
+    {
+      "id": "inv_2",
+      "studentId": "student_1",
+      "productId": "sp_b1",
+      "itemType": "BADGE",
+      "title": "نشان تمرکز عمیق",
+      "description": "ثبت پارت‌های متوالی با شاخص تمرکز حداکثری",
+      "rarity": "معمولی",
+      "icon": "Target",
+      "isEquipped": true,
+      "isConsumed": false,
+      "badgeId": "badge_1",
+      "acquiredAt": "2026-08-06T00:00:00.000Z"
+    },
+    {
+      "id": "inv_1791397041478_nyvld",
+      "studentId": "student_1",
+      "productId": "sp_c1",
+      "itemType": "CONSUMABLE",
+      "title": "۳۰ دقیقه استراحت آزاد",
+      "description": "یک پارت استراحت بدون ثبت در کاستی‌های برنامه هفتگی",
+      "rarity": "معمولی",
+      "icon": "Coffee",
+      "isEquipped": false,
+      "isConsumed": false,
+      "acquiredAt": "2026-10-07T18:17:21.478Z"
+    },
+    {
+      "id": "inv_1791397041483_q9z4o",
+      "studentId": "student_1",
+      "productId": "sp_t2",
+      "itemType": "TITLE",
+      "title": "پژوهشگر",
+      "description": "عنوان موشکافی و دقت تحلیلی",
+      "rarity": "معمولی",
+      "icon": "Tag",
+      "isEquipped": false,
+      "isConsumed": false,
+      "titleId": "title_2",
+      "acquiredAt": "2026-10-07T18:17:21.483Z"
+    },
+    {
+      "id": "inv_1791397041512_g10fb",
+      "studentId": "student_1",
+      "productId": "ach_30_DAY_STREAK",
+      "itemType": "BADGE",
+      "title": "نشان اراده پولادین",
+      "description": "ثبت استمرار متوالی و پیوسته به مدت ۳۰ روز تقویمی",
+      "rarity": "حماسی",
+      "icon": "Flame",
+      "isEquipped": false,
+      "isConsumed": false,
+      "badgeId": "badge_4",
+      "acquiredAt": "2026-10-07T18:17:21.512Z"
+    }
+  ],
+  "counselorBadgeGrants": []
+}

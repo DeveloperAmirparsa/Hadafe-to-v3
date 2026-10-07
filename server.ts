@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
+import puppeteer, { Browser } from 'puppeteer';
 import { db } from './src/server/db.js';
 import { isStrongPassword, normalizeUsername, sanitizeStudent, verifyPassword } from './src/server/security.js';
 
@@ -18,9 +19,28 @@ const DEFAULT_DEV_COUNSELOR_PASSWORD_HASH = 'scrypt$32768$8$1$sXDn5Tzf6Rm3rduunR
 const counselorUsername = normalizeUsername(process.env.COUNSELOR_USERNAME || DEFAULT_DEV_COUNSELOR_USERNAME);
 const counselorPasswordHash = process.env.COUNSELOR_PASSWORD_HASH || DEFAULT_DEV_COUNSELOR_PASSWORD_HASH;
 
+let puppeteerBrowser: Browser | null = null;
+
+async function getPuppeteerBrowser(): Promise<Browser> {
+  if (puppeteerBrowser && puppeteerBrowser.connected) {
+    return puppeteerBrowser;
+  }
+  puppeteerBrowser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--font-render-hinting=medium',
+    ],
+  });
+  return puppeteerBrowser;
+}
+
 app.disable('x-powered-by');
 app.set('trust proxy', process.env.TRUST_PROXY === '1' ? 1 : false);
-app.use(express.json({ limit: '256kb' }));
+app.use(express.json({ limit: '25mb' }));
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   // Allow rendering inside iframe for AI Studio preview
@@ -651,6 +671,72 @@ api.post('/study-hall/presence/:id/terminate', requireRole('COUNSELOR'), (req, r
   return res.json({ success: true });
 });
 
+// 17. High-Fidelity Chromium PDF Generation Engine
+api.post('/pdf/generate', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { html, filename } = req.body || {};
+    if (!html || typeof html !== 'string') {
+      return res.status(400).json({ error: 'محتوای HTML سند الزامی است.' });
+    }
+
+    const browser = await getPuppeteerBrowser();
+    const page = await browser.newPage();
+
+    try {
+      // Fixed A4 dimensions at 96 DPI (210mm x 297mm = 794px x 1123px)
+      await page.setViewport({
+        width: 794,
+        height: 1123,
+        deviceScaleFactor: 2,
+      });
+
+      // Emulate print CSS styles
+      await page.emulateMediaType('print');
+
+      // Set complete HTML and wait for load to ensure document is parsed
+      await page.setContent(html, {
+        waitUntil: 'load',
+        timeout: 30000,
+      });
+
+      // Ensure custom Persian web fonts (Estedad, JetBrains Mono) are ready
+      await page.evaluate(async () => {
+        if ('fonts' in document) {
+          await document.fonts.ready;
+        }
+      });
+
+      // Settle frame
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      // Native browser pagination with CSS page size respected and printBackground enabled
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        preferCSSPageSize: true,
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+
+      const safeFilename = typeof filename === 'string' && filename.endsWith('.pdf')
+        ? filename
+        : 'hadafeto-daily-report.pdf';
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(safeFilename)}"`);
+      res.setHeader('Content-Length', pdfBuffer.length);
+      return res.end(pdfBuffer);
+    } finally {
+      await page.close().catch(() => {});
+    }
+  } catch (error) {
+    console.error('[PDF Generation Error]:', error);
+    return res.status(500).json({
+      error: 'خطا در ساخت فایل PDF با موتور مرورگر Chromium.',
+      details: error instanceof Error ? error.message : String(error),
+    });
+  }
+});
+
 app.use('/api', api);
 
 async function startServer() {
@@ -669,6 +755,9 @@ async function startServer() {
 
 const shutdown = async (signal: string) => {
   console.log(`[Hadafe To] ${signal} received. Flushing pending database writes...`);
+  if (puppeteerBrowser) {
+    try { await puppeteerBrowser.close(); } catch { /* ignore */ }
+  }
   server.close(async () => {
     try { await db.flush(); } catch { /* ignore shutdown flush errors */ }
     process.exit(0);

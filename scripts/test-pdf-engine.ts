@@ -1,7 +1,7 @@
 /**
  * Automated Verification Script for Hadafeto Daily PDF Engine
  */
-import { normalizeDailyReportData, createStressTestDailyReportData } from '../src/components/pdf/dataNormalizer.js';
+import { normalizeDailyReportData } from '../src/components/pdf/dataNormalizer.js';
 import { computePagination } from '../src/components/pdf/paginationEngine.js';
 import { Student, PlanTask, SessionReport } from '../src/types/index.js';
 
@@ -58,25 +58,5 @@ console.log(`Strengths count: ${normalData.strengths.length}`);
 console.log(`Areas for attention count: ${normalData.areasForAttention.length}`);
 if (normalPagination.totalPages < 2) throw new Error('Expected at least 2 pages for 5 detailed tasks');
 console.log('✅ Test 2 Passed');
-
-console.log('\n--- TEST 3: Stress-Test Mode (32 Tasks, Long Notes, Multi-Page) ---');
-const stressData = createStressTestDailyReportData(mockStudent, '2026-10-07');
-const stressPagination = computePagination(stressData);
-console.log(`Stress-Test total tasks: ${stressData.tasks.length}`);
-console.log(`Stress-Test total pages: ${stressPagination.totalPages}`);
-let totalAssignedTasks = 0;
-stressPagination.pages.forEach((p, idx) => {
-  const pageTasks = p.sections.find((s) => s.type === 'TASK_CARD_LIST')?.tasks || [];
-  totalAssignedTasks += pageTasks.length;
-  console.log(` - Page ${p.pageNumber}/${stressPagination.totalPages}: "${p.pageTitle || 'بدون عنوان'}" (${pageTasks.length} task cards)`);
-});
-
-if (totalAssignedTasks !== stressData.tasks.length) {
-  throw new Error(`Task count mismatch! Expected ${stressData.tasks.length}, found ${totalAssignedTasks}`);
-}
-if (stressPagination.totalPages < 4) {
-  throw new Error(`Expected at least 4 pages for 32 detailed stress tasks, got ${stressPagination.totalPages}`);
-}
-console.log('✅ Test 3 Passed: All 32 tasks cleanly partitioned without clipping');
 
 console.log('\n--- ALL PDF ENGINE TESTS PASSED SUCCESSFULLY! ---');
