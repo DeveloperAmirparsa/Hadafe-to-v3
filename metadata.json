@@ -1,0 +1,6 @@
+{
+  "name": "هدف تو - سامانه مدیریت و ارزیابی کنکور",
+  "description": "سامانه هوشمند و مینیمال ارزیابی و برنامه‌ریزی تحصیلی کنکور با رویکرد شیشه‌ای لوکس و تعاملی. هر روز، یک قدم نزدیک‌تر.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

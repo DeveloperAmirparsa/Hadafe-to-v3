@@ -1,0 +1,33 @@
+databases:
+  - name: hadafeto-db
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    name: hadafeto
+    runtime: node
+    region: frankfurt
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SESSION_TTL_HOURS
+        value: "168"
+      - key: SEED_DEMO_DATA
+        value: "false"
+      - key: COUNSELOR_USERNAME
+        value: dr.parsa
+      - key: COUNSELOR_PASSWORD_HASH
+        sync: false
+      - key: DATABASE_SSL
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hadafeto-db
+          property: connectionString
