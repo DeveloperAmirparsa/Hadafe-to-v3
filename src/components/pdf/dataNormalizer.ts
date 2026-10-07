@@ -36,18 +36,32 @@ export function normalizeDailyReportData(
     .slice()
     .sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
 
-  // 2. Reports matching tasks or date
+  // 2. Reports matching tasks or date (strictly indexed by taskId)
   const dayTaskIds = new Set(dayTasks.map((t) => t.id));
+  const reportsByTaskId: Record<string, SessionReport> = {};
+
+  // Strictly index student's reports by taskId
+  allReports.forEach((r) => {
+    if (r && r.taskId && (r.studentId === student.id || !r.studentId)) {
+      reportsByTaskId[r.taskId] = r;
+    }
+  });
+
+  // Support tasks referencing sessionReportId
+  dayTasks.forEach((t) => {
+    if (t.sessionReportId && !reportsByTaskId[t.id]) {
+      const matched = allReports.find((r) => r.id === t.sessionReportId);
+      if (matched) {
+        reportsByTaskId[t.id] = matched;
+      }
+    }
+  });
+
   const dayReports = allReports.filter(
     (r) =>
       r.studentId === student.id &&
       (dayTaskIds.has(r.taskId) || r.date === date)
   );
-
-  const reportsByTaskId: Record<string, SessionReport> = {};
-  dayReports.forEach((r) => {
-    if (r.taskId) reportsByTaskId[r.taskId] = r;
-  });
 
   // 3. Task completion states
   const completedTasks = dayTasks.filter((t) => t.isCompleted);
