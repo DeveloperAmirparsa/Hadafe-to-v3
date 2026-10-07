@@ -31,7 +31,7 @@
       "phone": "۰۹۱۲۳۴۵۶۷۸۹",
       "city": "تهران",
       "counselorNotes": "دانش‌آموز بسیار منظم، در تست‌های مفهومی زیست‌شناسی ژنتیک نیاز به تمرکز بیشتر دارد. روحیه رقابتی عالی.",
-      "focusPoints": 5070,
+      "focusPoints": 6070,
       "streak": 34,
       "dailyStudyGoalMinutes": 480,
       "weeklyStudyGoalMinutes": 3000,
@@ -265,6 +265,20 @@
       "isRest": false,
       "isCompleted": false,
       "id": "task_1791399752059_762j"
+    },
+    {
+      "studentId": "student_1",
+      "date": "2026-10-07",
+      "courseName": "زیست‌شناسی دوازدهم - ژنتیک",
+      "activityType": "مطالعه",
+      "testMode": "ندارد",
+      "minTests": 0,
+      "durationMinutes": 75,
+      "order": 10,
+      "status": "PLANNED",
+      "isRest": false,
+      "isCompleted": false,
+      "id": "task_1791401607782_t3q8"
     }
   ],
   "sessionReports": [
@@ -470,6 +484,15 @@
       "actor": "COUNSELOR",
       "id": "tx_1791399752086_32k0",
       "createdAt": "2026-10-07T19:02:32.086Z"
+    },
+    {
+      "studentId": "student_1",
+      "amount": 1000,
+      "type": "COUNSELOR_BONUS",
+      "description": "شارژ تستی امتیاز تمرکز",
+      "actor": "COUNSELOR",
+      "id": "tx_1791401607806_93rl",
+      "createdAt": "2026-10-07T19:33:27.806Z"
     }
   ],
   "rewards": [

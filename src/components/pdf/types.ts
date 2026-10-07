@@ -78,6 +78,11 @@ export type PageSectionType =
   | 'INSIGHTS_SECTION'
   | 'FINAL_SUMMARY';
 
+export interface AtomicTaskCard {
+  task: PlanTask;
+  height: number;
+}
+
 export interface PdfPageContent {
   pageNumber: number;
   pageTitle?: string;

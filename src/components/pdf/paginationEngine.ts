@@ -1,55 +1,126 @@
 /**
- * Smart Pagination Engine for Daily PDF Report
- * Calculates explicit page budgets and partitions content into discrete A4 pages.
- * Packs task cards dynamically based on real rendered block heights without arbitrary breaks.
+ * Smart Dynamic Pagination Engine for Daily PDF Report
+ * Calculates atomic block heights for individual report cards and sections.
+ * Dynamically packs cards into A4 pages based on available budget without arbitrary breaks.
  */
 import { DailyReportData, PaginationResult, PdfPageContent } from './types.js';
 import { PlanTask } from '../../types/index.js';
 
 // Safe available content height per A4 page in pixels for Page 2+
-// (1123px total A4 height - 44px vertical padding - 32px compact header - 38px footer)
-const PAGE_2_CONTENT_BUDGET = 990;
+// (1123px total A4 height - 34px vertical padding - 30px compact header - 32px footer - 6px margin)
+export const PAGE_2_CONTENT_BUDGET = 1010;
 
-export function estimateTaskCardHeight(task: PlanTask, data: DailyReportData): number {
+/**
+ * Calculates the exact rendered height of an individual report card as an atomic block.
+ */
+export function calculateTaskCardHeight(task: PlanTask, data: DailyReportData): number {
   const report = data.reportsByTaskId[task.id];
-  // Base header height: 32px + container borders & padding: ~14px = 46px
-  let height = 46;
+
+  // Base card outer border (2px) + header (31px) + body padding (16px) = 49px
+  let height = 49;
 
   if (report) {
-    // Quality ratings grid (focus, satisfaction, difficulty)
-    height += 30;
-
-    // Test results section
-    const isExam = task.testMode === 'آزمونی';
-    const isEducational = task.testMode === 'آموزشی';
-    const isTestActivity = task.activityType === 'تست';
-    const isTestTask = isExam || isEducational || isTestActivity || (task.minTests || 0) > 0;
-
-    if (isTestTask) {
-      height += 32;
+    // Quality ratings grid (focus, satisfaction, difficulty): ~22px
+    const hasRatings =
+      typeof report.focus === 'number' ||
+      typeof report.satisfaction === 'number' ||
+      typeof report.difficulty === 'number';
+    if (hasRatings) {
+      height += 22;
     }
 
-    // Reflection note
+    // Determine test characteristics
+    const testRes = report.testResult;
+    const isExamTest =
+      task.testMode === 'آزمونی' ||
+      (testRes && (typeof testRes.correct === 'number' || typeof testRes.wrong === 'number'));
+    const isEducationalOrGeneralTest =
+      !isExamTest &&
+      (task.testMode === 'آموزشی' ||
+       task.activityType === 'تست' ||
+       (task.minTests || 0) > 0 ||
+       typeof report.testsCount === 'number' ||
+       !!testRes);
+
+    const totalTests = typeof testRes?.total === 'number'
+      ? testRes.total
+      : typeof report.testsCount === 'number'
+      ? report.testsCount
+      : null;
+
+    if (isExamTest) {
+      if (totalTests !== null) {
+        // Exam test with registered questions: padding 12px + text 14px + border 2px + gap 6px = 34px
+        const correct = typeof testRes?.correct === 'number' ? testRes.correct : null;
+        const wrong = typeof testRes?.wrong === 'number' ? testRes.wrong : null;
+        const unanswered = typeof testRes?.unanswered === 'number' ? testRes.unanswered : null;
+        const isSumMismatch =
+          correct !== null && wrong !== null && unanswered !== null && correct + wrong + unanswered !== totalTests;
+
+        height += isSumMismatch ? 46 : 34;
+      } else {
+        // Exam test with no test info registered: fallback banner ~24px + gap 6px = 30px
+        height += 30;
+      }
+    } else if (isEducationalOrGeneralTest) {
+      if (totalTests !== null) {
+        // Educational test with registered count: ~28px + gap 6px = 34px
+        height += 34;
+      } else if (task.activityType === 'تست' || task.testMode === 'آموزشی' || (task.minTests || 0) > 0) {
+        // Designated test task with no test data: fallback banner ~24px + gap 6px = 30px
+        height += 30;
+      }
+    }
+
+    // Reflection note (dynamic line count)
     if (report.reflectionNote && report.reflectionNote.trim().length > 0) {
-      const len = report.reflectionNote.trim().length;
-      const lines = Math.ceil(len / 85);
-      height += 16 + lines * 16;
+      const text = report.reflectionNote.trim();
+      const lines = Math.max(1, Math.ceil(text.length / 80));
+      // Label 14px + padding 10px + lines * 15px + gap 6px
+      height += 14 + 10 + lines * 15 + 6;
     }
   } else {
-    // No report registered yet: test task shows "اطلاعات تست ثبت نشده است"
+    // No session report registered:
     const isTestTask =
       task.activityType === 'تست' ||
       task.testMode === 'آموزشی' ||
       task.testMode === 'آزمونی' ||
       (task.minTests || 0) > 0;
+
     if (isTestTask) {
-      height += 28;
+      // Shows fallback "اطلاعات تست ثبت نشده است": ~22px
+      height += 22;
+    } else {
+      // Shows subtle notice: ~18px
+      height += 18;
     }
   }
 
-  return height + 8; // Card height + gap
+  // Card gap in the list: 8px
+  return height + 8;
 }
 
+// Export backwards-compatible alias
+export const estimateTaskCardHeight = calculateTaskCardHeight;
+
+/**
+ * Calculates height of Insights section (Strengths & Areas for attention)
+ */
+export function calculateInsightsHeight(data: DailyReportData): number {
+  const maxItems = Math.max(data.strengths.length || 1, data.areasForAttention.length || 1);
+  return 24 + 16 + (maxItems * 18) + 10;
+}
+
+/**
+ * Calculates height of Final Summary section
+ */
+export function calculateFinalSummaryHeight(): number {
+  return 125;
+}
+
+/**
+ * Dynamic pagination algorithm
+ */
 export function computePagination(data: DailyReportData): PaginationResult {
   const pages: PdfPageContent[] = [];
 
@@ -92,7 +163,7 @@ export function computePagination(data: DailyReportData): PaginationResult {
     ],
   });
 
-  // Pages 2+: Detailed Task Reports paginated by item heights
+  // Pages 2+: Detailed Task Reports paginated dynamically as atomic blocks
   if (hasTasks) {
     let currentPageTasks: PlanTask[] = [];
     let currentHeight = 0;
@@ -100,55 +171,54 @@ export function computePagination(data: DailyReportData): PaginationResult {
 
     for (let i = 0; i < data.tasks.length; i++) {
       const task = data.tasks[i];
-      const cardHeight = estimateTaskCardHeight(task, data);
+      const cardHeight = calculateTaskCardHeight(task, data);
 
-      // If adding this card exceeds the budget and we already have cards on this page:
-      // move the card to the next page
-      if (currentHeight + cardHeight > PAGE_2_CONTENT_BUDGET && currentPageTasks.length > 0) {
+      if (currentHeight + cardHeight <= PAGE_2_CONTENT_BUDGET) {
+        currentPageTasks.push(task);
+        currentHeight += cardHeight;
+      } else {
+        if (currentPageTasks.length > 0) {
+          pages.push({
+            pageNumber: pageIndex,
+            pageTitle: `جزئیات پارت‌های مطالعه (بخش ${pageIndex - 1})`,
+            sections: [{ type: 'TASK_CARD_LIST', tasks: currentPageTasks }],
+          });
+          pageIndex++;
+          currentPageTasks = [task];
+          currentHeight = cardHeight;
+        } else {
+          currentPageTasks.push(task);
+          currentHeight += cardHeight;
+        }
+      }
+    }
+
+    // Now check if Insights & Final Summary can fit on the last page of tasks
+    const summaryNeededHeight = calculateInsightsHeight(data) + calculateFinalSummaryHeight() + 10;
+
+    if (currentHeight + summaryNeededHeight <= PAGE_2_CONTENT_BUDGET) {
+      // Append right on the current page to eliminate empty pages
+      pages.push({
+        pageNumber: pageIndex,
+        pageTitle: pageIndex === 2 ? 'جزئیات پارت‌ها و جمع‌بندی روزانه' : `جزئیات پارت‌های مطالعه (بخش ${pageIndex - 1})`,
+        sections: [
+          { type: 'TASK_CARD_LIST', tasks: currentPageTasks },
+          { type: 'INSIGHTS_SECTION' },
+          { type: 'FINAL_SUMMARY' },
+        ],
+      });
+    } else {
+      // Close the task cards page and allocate summary to a new page
+      if (currentPageTasks.length > 0) {
         pages.push({
           pageNumber: pageIndex,
           pageTitle: `جزئیات پارت‌های مطالعه (بخش ${pageIndex - 1})`,
           sections: [{ type: 'TASK_CARD_LIST', tasks: currentPageTasks }],
         });
         pageIndex++;
-        currentPageTasks = [task];
-        currentHeight = cardHeight;
-      } else {
-        currentPageTasks.push(task);
-        currentHeight += cardHeight;
       }
-    }
-
-    if (currentPageTasks.length > 0) {
       pages.push({
         pageNumber: pageIndex,
-        pageTitle: `جزئیات پارت‌های مطالعه (بخش ${pageIndex - 1})`,
-        sections: [{ type: 'TASK_CARD_LIST', tasks: currentPageTasks }],
-      });
-      pageIndex++;
-    }
-  }
-
-  // Summary & Insights Sections (Insights ~110px + Final Summary ~80px = ~190px)
-  const SUMMARY_HEIGHT = 195;
-  const lastPage = pages[pages.length - 1];
-
-  if (lastPage && lastPage.pageNumber >= 2) {
-    const lastPageTasks = lastPage.sections.find((s) => s.type === 'TASK_CARD_LIST')?.tasks || [];
-    const lastPageUsedHeight = lastPageTasks.reduce(
-      (acc, t) => acc + estimateTaskCardHeight(t, data),
-      0
-    );
-
-    // If last page has ample room, append summary to it!
-    if (lastPageUsedHeight + SUMMARY_HEIGHT <= PAGE_2_CONTENT_BUDGET) {
-      lastPage.sections.push({ type: 'INSIGHTS_SECTION' });
-      lastPage.sections.push({ type: 'FINAL_SUMMARY' });
-    } else {
-      // Otherwise, put summary on dedicated page
-      const finalPageNum = pages.length + 1;
-      pages.push({
-        pageNumber: finalPageNum,
         pageTitle: 'جمع‌بندی تحلیلی و بازخورد روزانه',
         sections: [
           { type: 'INSIGHTS_SECTION' },
@@ -156,7 +226,8 @@ export function computePagination(data: DailyReportData): PaginationResult {
         ],
       });
     }
-  } else if (!hasTasks) {
+  } else {
+    // No tasks at all: Page 2 gets insights & summary
     pages.push({
       pageNumber: 2,
       pageTitle: 'جمع‌بندی تحلیلی و بازخورد روزانه',

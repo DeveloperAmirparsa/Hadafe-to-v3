@@ -37,12 +37,22 @@ export function normalizeDailyReportData(
     .sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
 
   // 2. Reports matching tasks or date (strictly indexed by taskId)
-  const dayTaskIds = new Set(dayTasks.map((t) => t.id));
   const reportsByTaskId: Record<string, SessionReport> = {};
 
   // Strictly index student's reports by taskId
-  allReports.forEach((r) => {
-    if (r && r.taskId && (r.studentId === student.id || !r.studentId)) {
+  const studentReports = allReports.filter(
+    (r) => r && (!r.studentId || r.studentId === student.id)
+  );
+
+  // Sort by createdAt ascending so latest report takes precedence
+  const sortedReports = [...studentReports].sort((a, b) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeA - timeB;
+  });
+
+  sortedReports.forEach((r) => {
+    if (r.taskId) {
       reportsByTaskId[r.taskId] = r;
     }
   });
@@ -50,18 +60,24 @@ export function normalizeDailyReportData(
   // Support tasks referencing sessionReportId
   dayTasks.forEach((t) => {
     if (t.sessionReportId && !reportsByTaskId[t.id]) {
-      const matched = allReports.find((r) => r.id === t.sessionReportId);
+      const matched = sortedReports.find((r) => r.id === t.sessionReportId);
       if (matched) {
         reportsByTaskId[t.id] = matched;
       }
     }
   });
 
-  const dayReports = allReports.filter(
-    (r) =>
-      r.studentId === student.id &&
-      (dayTaskIds.has(r.taskId) || r.date === date)
+  // Reports strictly associated with this day's tasks
+  const matchedTaskReports = dayTasks
+    .map((t) => reportsByTaskId[t.id])
+    .filter((r): r is SessionReport => Boolean(r));
+
+  // Include any other student reports specifically for this date
+  const otherDateReports = sortedReports.filter(
+    (r) => r.date === date && !matchedTaskReports.some((m) => m.id === r.id)
   );
+
+  const dayReports = [...matchedTaskReports, ...otherDateReports];
 
   // 3. Task completion states
   const completedTasks = dayTasks.filter((t) => t.isCompleted);
@@ -100,7 +116,12 @@ export function normalizeDailyReportData(
   const testPercentages: number[] = [];
 
   dayReports.forEach((r) => {
-    totalTestsCount += r.testsCount || 0;
+    const count = typeof r.testResult?.total === 'number'
+      ? r.testResult.total
+      : typeof r.testsCount === 'number'
+      ? r.testsCount
+      : 0;
+    totalTestsCount += count;
     if (r.testResult) {
       const { correct = 0, wrong = 0, unanswered = 0, percentage } = r.testResult;
       totalCorrectTests += correct;

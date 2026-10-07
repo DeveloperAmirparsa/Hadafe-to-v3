@@ -37,7 +37,7 @@ export const PdfPage: React.FC<PageProps> = ({
         color: '#f8fafc',
         fontFamily: "'Estedad', sans-serif",
         boxSizing: 'border-box',
-        padding: '24px 32px 20px 32px',
+        padding: pageNumber === 1 ? '20px 28px 16px 28px' : '16px 28px 16px 28px',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -68,7 +68,7 @@ export const PdfPage: React.FC<PageProps> = ({
         <PdfHeader data={data} pageNumber={pageNumber} subTitle={title} />
 
         {/* Content Body */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, marginTop: '8px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, marginTop: '6px' }}>
           {children}
         </div>
       </div>
@@ -87,104 +87,104 @@ export const PdfHeader: React.FC<{
   const isFirstPage = pageNumber === 1;
 
   if (!isFirstPage) {
-    // Pages 2+: Ultra-minimal compact header
+    // Pages 2+: Ultra-minimal compact header (small logo, title, date - NO student name)
     return (
       <div
         style={{
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          paddingBottom: '6px',
+          paddingBottom: '4px',
           marginBottom: '4px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          height: '24px',
+          boxSizing: 'border-box',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div
             style={{
-              width: '22px',
-              height: '22px',
-              borderRadius: '6px',
+              width: '18px',
+              height: '18px',
+              borderRadius: '5px',
               background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 6px rgba(124, 58, 237, 0.3)',
             }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff' }}>هـ</span>
+            <span style={{ fontSize: '10px', fontWeight: 800, color: '#ffffff' }}>هـ</span>
           </div>
-          <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#e2e8f0' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#e2e8f0' }}>
             هدف تو <span style={{ color: '#94a3b8', fontWeight: 500 }}>| {subTitle || 'گزارش عملکرد روزانه'}</span>
           </span>
         </div>
 
-        <div style={{ fontSize: '10.5px', color: '#94a3b8' }}>
+        <div style={{ fontSize: '10px', color: '#94a3b8' }}>
           {data.fullJalaliDate}
         </div>
       </div>
     );
   }
 
-  // Page 1: Clean, compact, professional header
+  // Page 1: Clean, compact, professional header (Logo, «گزارش عملکرد روزانه», Student Name, Date)
   return (
     <div
       style={{
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        paddingBottom: '8px',
+        paddingBottom: '6px',
         marginBottom: '6px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        height: '34px',
+        boxSizing: 'border-box',
       }}
     >
       {/* Right side: Logo & Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div
           style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '9px',
+            width: '26px',
+            height: '26px',
+            borderRadius: '7px',
             background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 3px 10px rgba(124, 58, 237, 0.35)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 2px 8px rgba(124, 58, 237, 0.3)',
           }}
         >
-          <span style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>هـ</span>
+          <span style={{ fontSize: '13px', fontWeight: 800, color: '#ffffff' }}>هـ</span>
         </div>
 
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <h1 style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-              هدف تو
-            </h1>
-            <span
-              style={{
-                fontSize: '10.5px',
-                padding: '1px 6px',
-                borderRadius: '5px',
-                backgroundColor: 'rgba(139, 92, 246, 0.18)',
-                color: '#c4b5fd',
-                fontWeight: 600,
-              }}
-            >
-              گزارش عملکرد روزانه
-            </span>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>
+            هدف تو
+          </span>
+          <span
+            style={{
+              fontSize: '10px',
+              padding: '1px 6px',
+              borderRadius: '4px',
+              backgroundColor: 'rgba(139, 92, 246, 0.18)',
+              color: '#c4b5fd',
+              fontWeight: 600,
+            }}
+          >
+            گزارش عملکرد روزانه
+          </span>
         </div>
       </div>
 
-      {/* Left side: Student Name & Date */}
-      <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
-        <div style={{ fontSize: '13px', fontWeight: 700, color: '#f1f5f9' }}>
+      {/* Left side: Student Name & Date (Compact & Simple) */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#f1f5f9' }}>
           {data.student.fullName}
-        </div>
-        <div style={{ fontSize: '10.5px', color: '#94a3b8' }}>
+        </span>
+        <span style={{ fontSize: '10px', color: '#94a3b8' }}>
           {data.fullJalaliDate}
-        </div>
+        </span>
       </div>
     </div>
   );
@@ -676,13 +676,9 @@ export const PdfTaskCard: React.FC<{
   const isDone = task.isCompleted;
   const isMissed = !isDone && task.status === 'MISSED';
 
-  const isExam = task.testMode === 'آزمونی';
-  const isEducational = task.testMode === 'آموزشی';
-  const isTestActivity = task.activityType === 'تست';
-  const isTestTask = isExam || isEducational || isTestActivity || (task.minTests || 0) > 0;
-
-  // Real test statistics strictly from report
   const testRes = report?.testResult;
+
+  // Real test statistics strictly from report (preserve actual registered numbers, even 0)
   const total = typeof testRes?.total === 'number'
     ? testRes.total
     : typeof report?.testsCount === 'number'
@@ -692,6 +688,20 @@ export const PdfTaskCard: React.FC<{
   const correct = typeof testRes?.correct === 'number' ? testRes.correct : null;
   const wrong = typeof testRes?.wrong === 'number' ? testRes.wrong : null;
   const unanswered = typeof testRes?.unanswered === 'number' ? testRes.unanswered : null;
+
+  // Determine test mode strictly from task definition or real report data
+  const isExam =
+    task.testMode === 'آزمونی' ||
+    Boolean(testRes && (typeof testRes.correct === 'number' || typeof testRes.wrong === 'number'));
+
+  const isEducationalOrGeneral =
+    !isExam &&
+    (task.testMode === 'آموزشی' ||
+      task.activityType === 'تست' ||
+      (task.minTests || 0) > 0 ||
+      total !== null);
+
+  const isTestTask = isExam || isEducationalOrGeneral;
 
   // Compute test percentage strictly according to system formula:
   // ((correct - (wrong / 3)) / total) * 100
@@ -705,9 +715,10 @@ export const PdfTaskCard: React.FC<{
     }
   }
 
-  // Check sum validity for exam tests
+  // Check sum validity for exam tests (correct + wrong + blank === total)
+  const hasExamBreakdown = correct !== null && wrong !== null && unanswered !== null;
   const isSumValid =
-    total !== null && correct !== null && wrong !== null && unanswered !== null
+    hasExamBreakdown && total !== null
       ? correct + wrong + unanswered === total
       : true;
 
@@ -865,7 +876,7 @@ export const PdfTaskCard: React.FC<{
             {/* Test Section for Exam / Educational tests */}
             {isExam ? (
               // EXAM TEST: total, correct, wrong, unanswered, percentage
-              total !== null && total > 0 ? (
+              total !== null ? (
                 <div
                   style={{
                     backgroundColor: 'rgba(15, 23, 42, 0.65)',
@@ -880,28 +891,22 @@ export const PdfTaskCard: React.FC<{
                     gap: '4px',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                     <span style={{ color: '#cbd5e1', fontWeight: 700 }}>
                       کل تست: {toPersianDigits(total)}
                     </span>
-                    {correct !== null && (
-                      <span style={{ color: '#34d399' }}>
-                        صحیح: {toPersianDigits(correct)}
-                      </span>
-                    )}
-                    {wrong !== null && (
-                      <span style={{ color: '#f87171' }}>
-                        غلط: {toPersianDigits(wrong)}
-                      </span>
-                    )}
-                    {unanswered !== null && (
-                      <span style={{ color: '#94a3b8' }}>
-                        نزده: {toPersianDigits(unanswered)}
-                      </span>
-                    )}
-                    {!isSumValid && (
-                      <span style={{ color: '#f59e0b', fontSize: '9px', opacity: 0.85 }}>
-                        (مجموع: {toPersianDigits((correct || 0) + (wrong || 0) + (unanswered || 0))})
+                    <span style={{ color: '#34d399' }}>
+                      صحیح: {correct !== null ? toPersianDigits(correct) : '—'}
+                    </span>
+                    <span style={{ color: '#f87171' }}>
+                      غلط: {wrong !== null ? toPersianDigits(wrong) : '—'}
+                    </span>
+                    <span style={{ color: '#94a3b8' }}>
+                      نزده: {unanswered !== null ? toPersianDigits(unanswered) : '—'}
+                    </span>
+                    {!isSumValid && hasExamBreakdown && (
+                      <span style={{ color: '#f59e0b', fontSize: '9px', fontWeight: 600 }}>
+                        (! مغایرت مجموع: {toPersianDigits(correct! + wrong! + unanswered!)} از {toPersianDigits(total)})
                       </span>
                     )}
                   </div>
@@ -935,9 +940,9 @@ export const PdfTaskCard: React.FC<{
                   اطلاعات تست ثبت نشده است
                 </div>
               )
-            ) : isEducational || (isTestActivity && !isExam) ? (
-              // EDUCATIONAL TEST: show test count, no fake breakdown
-              total !== null && total > 0 ? (
+            ) : isEducationalOrGeneral ? (
+              // EDUCATIONAL TEST: show actual test count, do not fabricate breakdown
+              total !== null ? (
                 <div
                   style={{
                     backgroundColor: 'rgba(15, 23, 42, 0.6)',
@@ -978,7 +983,7 @@ export const PdfTaskCard: React.FC<{
                     </div>
                   )}
                 </div>
-              ) : (
+              ) : isTestTask ? (
                 <div
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.02)',
@@ -990,7 +995,7 @@ export const PdfTaskCard: React.FC<{
                 >
                   اطلاعات تست ثبت نشده است
                 </div>
-              )
+              ) : null
             ) : null}
 
             {/* Reflection Note */}

@@ -60,7 +60,7 @@ export const DailyReportPdfDocument: React.FC<Props> = ({ data, containerRef }) 
 
               case 'TASK_CARD_LIST':
                 return (
-                  <div key={sIdx} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div key={sIdx} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {section.tasks?.map((task) => (
                       <PdfTaskCard key={task.id} task={task} data={data} />
                     ))}
